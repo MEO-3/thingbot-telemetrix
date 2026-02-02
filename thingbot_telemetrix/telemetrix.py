@@ -22,12 +22,9 @@ import time
 from collections import deque
 
 import serial
-# noinspection PyPackageRequirementscd
 from serial.serialutil import SerialException
-# noinspection PyPackageRequirements
 from serial.tools import list_ports
 
-# noinspection PyUnresolvedReferences
 from thingbot_telemetrix.private_constants import ThingBotConstraints as PrivateConstants
 
 
@@ -62,7 +59,6 @@ class Telemetrix(threading.Thread):
 
     """
 
-    # noinspection PyPep8,PyPep8,PyPep8
     def __init__(self, com_port=None, arduino_instance_id=1,
                  arduino_wait=4, sleep_tune=0.000001,
                  shutdown_on_exception=True,
@@ -141,57 +137,28 @@ class Telemetrix(threading.Thread):
         self.report_dispatch = {}
 
         # To add a command to the command dispatch table, append here.
-        self.report_dispatch.update(
-            {PrivateConstants.LOOP_COMMAND: self._report_loop_data})
-        self.report_dispatch.update(
-            {PrivateConstants.DEBUG_PRINT: self._report_debug_data})
-        self.report_dispatch.update(
-            {PrivateConstants.DIGITAL_REPORT: self._digital_message})
-        self.report_dispatch.update(
-            {PrivateConstants.ANALOG_REPORT: self._analog_message})
-        self.report_dispatch.update(
-            {PrivateConstants.FIRMWARE_REPORT: self._firmware_message})
+        self.report_dispatch.update({PrivateConstants.LOOP_COMMAND: self._report_loop_data})
+        self.report_dispatch.update({PrivateConstants.DEBUG_PRINT: self._report_debug_data})
+        self.report_dispatch.update({PrivateConstants.DIGITAL_REPORT: self._digital_message})
+        self.report_dispatch.update({PrivateConstants.ANALOG_REPORT: self._analog_message})
+        self.report_dispatch.update({PrivateConstants.FIRMWARE_REPORT: self._firmware_message})
         self.report_dispatch.update({PrivateConstants.I_AM_HERE_REPORT: self._i_am_here})
-        self.report_dispatch.update(
-            {PrivateConstants.SERVO_UNAVAILABLE: self._servo_unavailable})
-        self.report_dispatch.update(
-            {PrivateConstants.I2C_READ_REPORT: self._i2c_read_report})
-        self.report_dispatch.update(
-            {PrivateConstants.I2C_TOO_FEW_BYTES_RCVD: self._i2c_too_few})
-        self.report_dispatch.update(
-            {PrivateConstants.I2C_TOO_MANY_BYTES_RCVD: self._i2c_too_many})
-        self.report_dispatch.update(
-            {PrivateConstants.SONAR_DISTANCE: self._sonar_distance_report})
+        self.report_dispatch.update({PrivateConstants.SERVO_UNAVAILABLE: self._servo_unavailable})
+        self.report_dispatch.update({PrivateConstants.I2C_READ_REPORT: self._i2c_read_report})
+        self.report_dispatch.update({PrivateConstants.I2C_TOO_FEW_BYTES_RCVD: self._i2c_too_few})
+        self.report_dispatch.update({PrivateConstants.I2C_TOO_MANY_BYTES_RCVD: self._i2c_too_many})
+        self.report_dispatch.update({PrivateConstants.SONAR_DISTANCE: self._sonar_distance_report})
         self.report_dispatch.update({PrivateConstants.DHT_REPORT: self._dht_report})
-        self.report_dispatch.update(
-            {PrivateConstants.SPI_REPORT: self._spi_report})
-        self.report_dispatch.update(
-            {PrivateConstants.ONE_WIRE_REPORT: self._onewire_report})
-        self.report_dispatch.update(
-            {PrivateConstants.STEPPER_DISTANCE_TO_GO:
-                 self._stepper_distance_to_go_report})
-        self.report_dispatch.update(
-            {PrivateConstants.STEPPER_TARGET_POSITION:
-                 self._stepper_target_position_report})
-        self.report_dispatch.update(
-            {PrivateConstants.STEPPER_CURRENT_POSITION:
-                 self._stepper_current_position_report})
-        self.report_dispatch.update(
-            {PrivateConstants.STEPPER_RUNNING_REPORT:
-                 self._stepper_is_running_report})
-        self.report_dispatch.update(
-            {PrivateConstants.STEPPER_RUN_COMPLETE_REPORT:
-                 self._stepper_run_complete_report})
-
-        self.report_dispatch.update(
-            {PrivateConstants.STEPPER_DISTANCE_TO_GO:
-                 self._stepper_distance_to_go_report})
-        self.report_dispatch.update(
-            {PrivateConstants.STEPPER_TARGET_POSITION:
-                 self._stepper_target_position_report})
-        self.report_dispatch.update(
-            {PrivateConstants.FEATURES:
-                 self._features_report})
+        self.report_dispatch.update({PrivateConstants.SPI_REPORT: self._spi_report})
+        self.report_dispatch.update({PrivateConstants.ONE_WIRE_REPORT: self._onewire_report})
+        self.report_dispatch.update({PrivateConstants.STEPPER_DISTANCE_TO_GO:self._stepper_distance_to_go_report})
+        self.report_dispatch.update({PrivateConstants.STEPPER_TARGET_POSITION:self._stepper_target_position_report})
+        self.report_dispatch.update({PrivateConstants.STEPPER_CURRENT_POSITION:self._stepper_current_position_report})
+        self.report_dispatch.update({PrivateConstants.STEPPER_RUNNING_REPORT:self._stepper_is_running_report})
+        self.report_dispatch.update({PrivateConstants.STEPPER_RUN_COMPLETE_REPORT:self._stepper_run_complete_report})
+        self.report_dispatch.update({PrivateConstants.STEPPER_DISTANCE_TO_GO:self._stepper_distance_to_go_report})
+        self.report_dispatch.update({PrivateConstants.STEPPER_TARGET_POSITION:self._stepper_target_position_report})
+        self.report_dispatch.update({PrivateConstants.FEATURES:self._features_report})
 
         # dictionaries to store the callbacks for each pin
         self.analog_callbacks = {}
