@@ -253,8 +253,8 @@ class Telemetrix(threading.Thread):
         self.the_reporter_thread.start()
         self.the_data_receive_thread.start()
 
-        print(f"Telemetrix:  Version {PrivateConstants.TELEMETRIX_VERSION}\n\n"
-              f"Copyright (c) 2021-2025 Alan Yorinks All Rights Reserved.\n")
+        print(f"ThingBot Telemetrix:  Version {PrivateConstants.TELEMETRIX_VERSION}\n\n"
+              f"Copyright (c) 2026 ThingEdu. All Rights Reserved.\n Copyright (c) 2021-2025 Alan Yorinks All Rights Reserved.\n")
 
         # using the serial link
         if not self.ip_address:
