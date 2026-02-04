@@ -3,7 +3,7 @@ import sys
 from examples.digital_input import the_callback
 from thingbot_telemetrix import telemetrix
 
-board = telemetrix.Telemetrix(com_port="/dev/ttyACM0")
+board = telemetrix.Telemetrix(shutdown_on_exception=False)
 
 def analog_in(my_board, pin):
     """

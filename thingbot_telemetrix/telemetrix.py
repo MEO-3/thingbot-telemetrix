@@ -142,7 +142,7 @@ class Telemetrix(threading.Thread):
         self.report_dispatch.update({PrivateConstants.DIGITAL_REPORT: self._digital_message})
         self.report_dispatch.update({PrivateConstants.ANALOG_REPORT: self._analog_message})
         self.report_dispatch.update({PrivateConstants.FIRMWARE_REPORT: self._firmware_message})
-        self.report_dispatch.update({PrivateConstants.I_AM_HERE_REPORT: self._i_am_here})
+        self.report_dispatch.update({PrivateConstants.I_AM_HERE_REPORT: self. _i_am_here})
         self.report_dispatch.update({PrivateConstants.SERVO_UNAVAILABLE: self._servo_unavailable})
         self.report_dispatch.update({PrivateConstants.I2C_READ_REPORT: self._i2c_read_report})
         self.report_dispatch.update({PrivateConstants.I2C_TOO_FEW_BYTES_RCVD: self._i2c_too_few})
@@ -254,7 +254,7 @@ class Telemetrix(threading.Thread):
         self.the_data_receive_thread.start()
 
         print(f"ThingBot Telemetrix:  Version {PrivateConstants.TELEMETRIX_VERSION}\n\n"
-              f"Copyright (c) 2026 ThingEdu. All Rights Reserved.\n Copyright (c) 2021-2025 Alan Yorinks All Rights Reserved.\n")
+              f"Copyright (c) 2026 ThingEdu. All Rights Reserved.\nCopyright (c) 2021-2025 Alan Yorinks All Rights Reserved.\n")
 
         # using the serial link
         if not self.ip_address:
@@ -340,8 +340,7 @@ class Telemetrix(threading.Thread):
             if port.pid is None or port.device in registered_ports:
                 continue
             try:
-                self.serial_port = serial.Serial(port.device, 115200,
-                                                 timeout=1, writeTimeout=0)
+                self.serial_port = serial.Serial(port.device, 115200, timeout=1, writeTimeout=0)
             except SerialException:
                 continue
             # create a list of serial ports that we opened
@@ -2325,6 +2324,8 @@ class Telemetrix(threading.Thread):
         # the length of the list is added at the head
         command.insert(0, len(command))
         send_message = bytes(command)
+
+        print(f'Sending command: {list(send_message)}')
 
         if self.serial_port:
             try:
