@@ -3,7 +3,7 @@
 
 """
 
-class ThingBotConstraints:
+class ThingBotConstants:
     """
     This class contains a set of constants for telemetrix internal use .
     """
@@ -26,3 +26,16 @@ class ThingBotConstraints:
     DEBUG_PRINT = 99
 
     TELEMETRIX_VERSION = "1.0"
+
+class PinModes:
+    """
+    This class contains a set of constants for telemetrix pin modes.
+    """
+
+    INPUT = 0
+    OUTPUT = 1
+    INPUT_PULLUP = 2
+    ANALOG_INPUT = 3
+    PWM_OUTPUT = 4
+    SERVO_OUTPUT = 5
+    DHT_INPUT = 6

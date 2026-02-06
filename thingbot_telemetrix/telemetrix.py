@@ -26,8 +26,10 @@ import serial
 from serial.serialutil import SerialException
 from serial.tools import list_ports
 
-from thingbot_telemetrix.private_constants import ThingBotConstraints
+from thingbot_telemetrix.private_constants import ThingBotConstants
 from thingbot_telemetrix.telemetrix_port_register import TelemetrixPortRegister
+from thingbot_telemetrix.handler.gpio_handler import GpioHandler
+from thingbot_telemetrix.handler.i2c_handler import I2CHandler
 
 
 class Telemetrix(threading.Thread):
@@ -105,7 +107,8 @@ class Telemetrix(threading.Thread):
         
         # report dispatch table
         self.report_dispatch = {
-            ThingBotConstraints.I_AM_HERE_REPORT: self._i_am_here_report,
+            ThingBotConstants.I_AM_HERE_REPORT: self._i_am_here_report,
+            ThingBotConstants.DEBUG_PRINT: self._debug_print_report
         }
         self.thread_data_receive.start()
         self.report_thread.start()
@@ -123,8 +126,18 @@ class Telemetrix(threading.Thread):
     
             if not self.serial_port:
                 raise RuntimeError('No Arduino found on any serial port.')
+            
+        self.gpio_handler = GpioHandler(self)
+        self.i2c_handler = I2CHandler(self)
     
-        
+    def gpio(self):
+        """
+        Access to GPIO handler methods.
+
+        :return: reference to GPIO handler instance
+        """
+        return self.gpio_handler
+
     # Thread control methods
     def _run_threads(self):
         self.run_event.set()
@@ -140,7 +153,7 @@ class Telemetrix(threading.Thread):
         """
         This is a private utility method.
         
-        :param command:  command data in the form of a list, e.g. [ThingBotConstraints.DIGITAL_WRITE, pin, value]
+        :param command:  command data in the form of a list, e.g. [ThingBotConstants.PinModes.DIGITAL_WRITE, pin, value]
 
         """
         # the length of the list is added at the head, the format of command package is [length, command, param1, param2, ...]
@@ -158,6 +171,8 @@ class Telemetrix(threading.Thread):
             self.sock.sendall(send_message)
         else:
             raise RuntimeError('No serial port or ip address set.')
+        
+        print(f'Sent command: {list(send_message)}')
         
     # Find the Arduino connected serial port
     def _find_arduino(self):
@@ -212,8 +227,7 @@ class Telemetrix(threading.Thread):
         # if port is not found, a serial exception will be thrown
         try:
             print(f'Opening {self.com_port}...')
-            self.serial_port = serial.Serial(self.com_port, 115200,
-                                             timeout=1, writeTimeout=0)
+            self.serial_port = serial.Serial(self.com_port, 115200, timeout=1, writeTimeout=0)
 
             print(
                 f'\nWaiting {self.arduino_wait} seconds(arduino_wait) for Arduino devices to '
@@ -237,7 +251,7 @@ class Telemetrix(threading.Thread):
         """
         Retrieve arduino-telemetrix arduino id
         """
-        command = [ThingBotConstraints.ARE_U_THERE]
+        command = [ThingBotConstants.ARE_U_THERE]
         self._send_command(command)
         # provide time for the reply
         time.sleep(.5)
@@ -251,6 +265,16 @@ class Telemetrix(threading.Thread):
             self.reported_arduino_id = data[0]
             print(f'Reported Arduino ID: {self.reported_arduino_id}')
 
+    def _debug_print_report(self, data):
+        """
+        Handler for DEBUG_PRINT report
+        :param data: list of data bytes for the report
+        """
+        if len(data) >= 3:
+            debug_id = data[0]
+            debug_value = (data[1] << 8) | data[2]
+            print(f'DEBUG_PRINT - ID: {debug_id}, Value: {debug_value}')
+
     def shutdown(self):
         """
         This method attempts an orderly shutdown
@@ -261,7 +285,7 @@ class Telemetrix(threading.Thread):
         self._stop_threads()
 
         try:
-            command = [ThingBotConstraints.STOP_ALL_REPORTS]
+            command = [ThingBotConstants.STOP_ALL_REPORTS]
             self._send_command(command)
             time.sleep(.5)
 
@@ -327,7 +351,7 @@ class Telemetrix(threading.Thread):
                     if self.shutdown_on_exception:
                         self.shutdown()
                     raise RuntimeError(
-                        'A report with a packet length of zero was received.')
+                        'A report with a packet length of zero was Received.')
             else:
                 time.sleep(self.sleep_tune)
     

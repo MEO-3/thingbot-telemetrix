@@ -1,4 +1,4 @@
-from thingbot_telemetrix.private_constants import ThingBotConstraints as PrivateConstants
+from thingbot_telemetrix.private_constants import ThingBotConstants
 
 class I2CHandler:
     def __init__(self, board):
