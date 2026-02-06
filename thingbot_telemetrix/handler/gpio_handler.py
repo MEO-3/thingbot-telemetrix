@@ -5,6 +5,15 @@ class GpioHandler:
         self.telemetrix = telemetrix
         self.digital_callbacks = {}
         self.analog_callbacks = {}
+        
+    def set_pin_mode_output(self, pin_number):
+        """
+        This function sets the specified pin as a digital output.
+
+        :param pin_number: Arduino pin number
+
+        """
+        self._set_pin_mode(pin_number, PinModes.OUTPUT)
 
     def set_pin_mode_digital_input(self, pin_number, callback=None):
         """
@@ -97,7 +106,7 @@ class GpioHandler:
 
         """
         if callback:
-            if pin_mode == PinModes.ANALOG_INPUT:
+            if pin_mode == PinModes.ANALOG:
                 self.analog_callbacks[pin_number] = callback
             elif pin_mode == PinModes.INPUT:
                 self.digital_callbacks[pin_number] = callback
@@ -110,16 +119,9 @@ class GpioHandler:
             command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.INPUT, 1]
         elif pin_mode == PinModes.INPUT_PULLUP:
             command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.INPUT_PULLUP, 1]
-        elif pin_mode == PinModes.ANALOG_INPUT:
-            command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.ANALOG_INPUT, differential, 1]
         elif pin_mode == PinModes.OUTPUT:
             command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.OUTPUT, 0]
-        elif pin_mode == PinModes.PWM_OUTPUT:
-            command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.PWM_OUTPUT, 0]
-        elif pin_mode == PinModes.SERVO_OUTPUT:
-            command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.SERVO_OUTPUT, 0]
-        elif pin_mode == PinModes.DHT_INPUT:
-            command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.DHT_INPUT, 0]
+            
         else:
             if self.telemetrix.shutdown_on_exception:
                 self.telemetrix.shutdown()

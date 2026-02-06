@@ -32,10 +32,7 @@ class PinModes:
     This class contains a set of constants for telemetrix pin modes.
     """
 
-    INPUT = 0
-    OUTPUT = 1
-    INPUT_PULLUP = 2
-    ANALOG_INPUT = 3
-    PWM_OUTPUT = 4
-    SERVO_OUTPUT = 5
-    DHT_INPUT = 6
+    INPUT = 0x01
+    OUTPUT = 0x03
+    INPUT_PULLUP = 0x05
+    ANALOG = 0x07
