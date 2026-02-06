@@ -33,6 +33,50 @@ class GpioHandler:
 
         """
         self._set_pin_mode(pin_number, PinModes.ANALOG_INPUT, differential=differential, callback=callback)
+
+    def digital_write(self, pin_number, value):
+        """
+        This function writes a digital value to the specified pin.
+
+        :param pin_number: Arduino pin number
+
+        :param value: HIGH (1) or LOW (0)
+
+        """
+        command = [ThingBotConstants.DIGITAL_WRITE, pin_number, value]
+        self.telemetrix._send_command(command)
+
+    def analog_write(self, pin_number, value):
+        """
+        This function writes an analog (PWM) value to the specified pin.
+
+        :param pin_number: Arduino pin number
+
+        :param value: PWM value (0-255)
+
+        """
+        command = [ThingBotConstants.ANALOG_WRITE, pin_number, value]
+        self.telemetrix._send_command(command)
+
+    def digital_read(self, pin_number):
+        """
+        This function requests a digital read from the specified pin.
+
+        :param pin_number: Arduino pin number
+
+        """
+        command = [ThingBotConstants.DIGITAL_READ, pin_number]
+        self.telemetrix._send_command(command)
+
+    def analog_read(self, pin_number):
+        """
+        This function requests an analog read from the specified pin.
+
+        :param pin_number: Arduino pin number
+
+        """
+        command = [ThingBotConstants.ANALOG_READ, pin_number]
+        self.telemetrix._send_command(command)
     
     def _set_pin_mode(self, pin_number, pin_mode, differential=0, callback=None):
         """
