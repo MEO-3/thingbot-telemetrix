@@ -69,6 +69,9 @@ class Telemetrix(threading.Thread):
 
         # initialize threading parent
         threading.Thread.__init__(self)
+
+        self.report_thread = threading.Thread(target=self._reporter)
+        self.report_thread.daemon = True
         
         # tcp transport attributes
         self.ip_address = ip_address
@@ -98,9 +101,14 @@ class Telemetrix(threading.Thread):
         self.reported_arduino_id = None
         
         # data receive deque
-        self.the_deque = deque()
+        self.msg_deque = deque()
         
+        # report dispatch table
+        self.report_dispatch = {
+            ThingBotConstraints.I_AM_HERE_REPORT: self._i_am_here_report,
+        }
         self.thread_data_receive.start()
+        self.report_thread.start()
         
         if not self.ip_address:
             if not self.com_port:
@@ -115,7 +123,7 @@ class Telemetrix(threading.Thread):
     
             if not self.serial_port:
                 raise RuntimeError('No Arduino found on any serial port.')
-                
+    
         
     # Thread control methods
     def _run_threads(self):
@@ -204,7 +212,16 @@ class Telemetrix(threading.Thread):
         self._send_command(command)
         # provide time for the reply
         time.sleep(.5)
-        
+    
+    def _i_am_here_report(self, data):
+        """
+        Handler for I_AM_HERE_REPORT
+        :param data: list of data bytes for the report
+        """
+        if len(data) >= 1:
+            self.reported_arduino_id = data[0]
+            print(f'Reported Arduino ID: {self.reported_arduino_id}')
+
     def shutdown(self):
         """
         This method attempts an orderly shutdown
@@ -240,7 +257,50 @@ class Telemetrix(threading.Thread):
             # raise RuntimeError('Shutdown failed - could not send stop streaming
             # message')
             pass
-        
+    
+    def _reporter(self):
+        """
+        This is the reporter thread. It continuously pulls data from
+        the deque. When a full message is detected, that message is
+        processed.
+        """
+        print('Starting reporter thread...')
+        self.run_event.wait()
+
+        while self._is_running() and not self.shutdown_flag:
+            if len(self.msg_deque) > 0:
+                # response_data will be populated with the received data for the report
+                response_data = []
+                packet_length = self.msg_deque.popleft()
+                if packet_length:
+                    # get all the data for the report and place it into response_data
+                    for i in range(packet_length):
+                        while not len(self.msg_deque):
+                            time.sleep(self.sleep_tune)
+                        data = self.msg_deque.popleft()
+                        response_data.append(data)
+
+                    # print(response_data)
+
+                    # get the report type and look up its dispatch method
+                    # here we pop the report type off of response_data
+                    report_type = response_data.pop(0)
+                    # print(report_type)
+
+                    # retrieve the report handler from the dispatch table
+                    dispatch_entry = self.report_dispatch.get(report_type)
+
+                    # if there is additional data for the report,
+                    # it will be contained in response_data
+                    dispatch_entry(response_data)
+                    continue
+                else:
+                    if self.shutdown_on_exception:
+                        self.shutdown()
+                    raise RuntimeError(
+                        'A report with a packet length of zero was received.')
+            else:
+                time.sleep(self.sleep_tune)
     
     # Receiver thread methods
     def _serial_receiver(self):
@@ -261,8 +321,8 @@ class Telemetrix(threading.Thread):
             try:
                 if self.serial_port.inWaiting():
                     c = self.serial_port.read()
-                    self.the_deque.append(ord(c))
-                    print(str(c))
+                    self.msg_deque.append(ord(c))
+                    print(f'Received byte: {ord(c)}')
                 else:
                     time.sleep(self.sleep_tune)
                     # continue
@@ -282,7 +342,7 @@ class Telemetrix(threading.Thread):
             while self._is_running() and not self.shutdown_flag:
                 try:
                     payload = self.sock.recv(1)
-                    self.the_deque.append(ord(payload))
+                    self.msg_deque.append(ord(payload))
                 except Exception:
                     pass
         else:
