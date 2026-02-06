@@ -118,7 +118,7 @@ class Telemetrix(threading.Thread):
                     if self.shutdown_on_exception:
                         self.shutdown()
             else:
-                self.serial_port = serial.Serial(self.com_port, 115200, timeout=1, writeTimeout=0)
+                self._manual_open()
                 print(f'Using serial port: {self.serial_port.port}')
     
             if not self.serial_port:
@@ -203,6 +203,35 @@ class Telemetrix(threading.Thread):
             self.shutdown()
 
         raise RuntimeError(f'Incorrect Arduino ID: {self.reported_arduino_id}')
+    
+    def _manual_open(self):
+        """
+        Com port was specified by the user - try to open up that port
+
+        """
+        # if port is not found, a serial exception will be thrown
+        try:
+            print(f'Opening {self.com_port}...')
+            self.serial_port = serial.Serial(self.com_port, 115200,
+                                             timeout=1, writeTimeout=0)
+
+            print(
+                f'\nWaiting {self.arduino_wait} seconds(arduino_wait) for Arduino devices to '
+                'reset...')
+            self._run_threads()
+            time.sleep(self.arduino_wait)
+
+            self._get_arduino_id()
+
+            if self.reported_arduino_id != self.arduino_instance_id:
+                if self.shutdown_on_exception:
+                    self.shutdown()
+                raise RuntimeError(f'Incorrect Arduino ID: {self.reported_arduino_id}')
+            print('Valid Arduino ID Found.')
+        except KeyboardInterrupt:
+            if self.shutdown_on_exception:
+                self.shutdown()
+            raise RuntimeError('User Hit Control-C')
     
     def _get_arduino_id(self):
         """
@@ -322,7 +351,7 @@ class Telemetrix(threading.Thread):
                 if self.serial_port.inWaiting():
                     c = self.serial_port.read()
                     self.msg_deque.append(ord(c))
-                    print(f'Received byte: {ord(c)}')
+                    # print(f'Received byte: {ord(c)}')
                 else:
                     time.sleep(self.sleep_tune)
                     # continue
