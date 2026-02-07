@@ -12,4 +12,18 @@ class DhtHandler:
         
         command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.DHT, dht_type]    
         self.telemetrix._send_command(command)
-        
+
+    def dht_report(self, pin_number, temperature, humidity):
+        """
+        This function is called when a DHT report is received from the Arduino.
+
+        :param pin_number: Arduino pin number
+
+        :param temperature: Temperature value from DHT sensor
+
+        :param humidity: Humidity value from DHT sensor
+
+        """
+        if pin_number in self.dht_callbacks:
+            callback = self.dht_callbacks[pin_number]
+            callback(temperature, humidity)
