@@ -22,8 +22,8 @@ class ThingBotConstants:
     # debug data from Arduino
     DIGITAL_REPORT = DIGITAL_WRITE
     ANALOG_REPORT = ANALOG_WRITE
-    DHT_REPORT = 7
     I_AM_HERE_REPORT = ARE_U_THERE
+    DHT_REPORT = 11
     DEBUG_PRINT = 99
 
     TELEMETRIX_VERSION = "1.0"

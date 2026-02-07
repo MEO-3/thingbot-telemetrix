@@ -349,7 +349,7 @@ class Telemetrix(threading.Thread):
                         data = self.msg_deque.popleft()
                         response_data.append(data)
 
-                    # print(response_data)
+                    print(response_data)
 
                     # get the report type and look up its dispatch method
                     # here we pop the report type off of response_data
