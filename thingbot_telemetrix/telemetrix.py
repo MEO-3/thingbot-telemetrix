@@ -26,6 +26,7 @@ import serial
 from serial.serialutil import SerialException
 from serial.tools import list_ports
 
+from thingbot_telemetrix.handler.dht_handler import DhtHandler
 from thingbot_telemetrix.private_constants import ThingBotConstants
 from thingbot_telemetrix.telemetrix_port_register import TelemetrixPortRegister
 from thingbot_telemetrix.handler.gpio_handler import GpioHandler
@@ -105,11 +106,6 @@ class Telemetrix(threading.Thread):
         # data receive deque
         self.msg_deque = deque()
         
-        # report dispatch table
-        self.report_dispatch = {
-            ThingBotConstants.I_AM_HERE_REPORT: self._i_am_here_report,
-            ThingBotConstants.DEBUG_PRINT: self._debug_print_report
-        }
         self.thread_data_receive.start()
         self.report_thread.start()
         
@@ -129,6 +125,13 @@ class Telemetrix(threading.Thread):
             
         self.gpio_handler = GpioHandler(self)
         self.i2c_handler = I2CHandler(self)
+        self.dht_handler = DhtHandler(self)
+        
+        # report dispatch table
+        self.report_dispatch = {
+            ThingBotConstants.I_AM_HERE_REPORT: self._i_am_here_report,
+            ThingBotConstants.DEBUG_PRINT: self._debug_print_report,
+        }
     
     def gpio(self):
         """
@@ -137,6 +140,15 @@ class Telemetrix(threading.Thread):
         :return: reference to GPIO handler instance
         """
         return self.gpio_handler
+    
+    def dht(self):
+        """
+        Access to DHT handler methods.
+
+        :return: reference to DHT handler instance
+        """
+        return self.dht_handler
+        
 
     # Thread control methods
     def _run_threads(self):

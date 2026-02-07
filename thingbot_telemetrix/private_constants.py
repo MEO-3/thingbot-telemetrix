@@ -22,6 +22,7 @@ class ThingBotConstants:
     # debug data from Arduino
     DIGITAL_REPORT = DIGITAL_WRITE
     ANALOG_REPORT = ANALOG_WRITE
+    DHT_REPORT = 7
     I_AM_HERE_REPORT = ARE_U_THERE
     DEBUG_PRINT = 99
 
@@ -36,3 +37,11 @@ class PinModes:
     OUTPUT = 0x03
     INPUT_PULLUP = 0x05
     ANALOG = 0x07
+    DHT = 0x11
+    
+class DHTTypes:
+    """
+    This class contains a set of constants for DHT sensor types.
+    """
+    DHT11 = 11
+    DHT22 = 22
