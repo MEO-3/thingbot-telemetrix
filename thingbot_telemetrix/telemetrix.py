@@ -118,6 +118,8 @@ class Telemetrix(threading.Thread):
         self.report_dispatch = {
             ThingBotConstants.I_AM_HERE_REPORT: self._i_am_here_report,
             ThingBotConstants.DEBUG_PRINT: self._debug_print_report,
+            ThingBotConstants.DIGITAL_REPORT: self.gpio_handler.digital_report,
+            ThingBotConstants.ANALOG_REPORT: self.gpio_handler.analog_report,
             ThingBotConstants.DHT_REPORT: self.dht_handler.dht_report,
         }
         
