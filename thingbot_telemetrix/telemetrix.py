@@ -188,7 +188,7 @@ class Telemetrix(threading.Thread):
         else:
             raise RuntimeError('No serial port or ip address set.')
         
-        print(f'Sent command: {list(send_message)}')
+        # print(f'Sent command: {list(send_message)}')
         
     # Find the Arduino connected serial port
     def _find_arduino(self):
@@ -349,7 +349,7 @@ class Telemetrix(threading.Thread):
                         data = self.msg_deque.popleft()
                         response_data.append(data)
 
-                    print(response_data)
+                    # print(response_data)
 
                     # get the report type and look up its dispatch method
                     # here we pop the report type off of response_data
