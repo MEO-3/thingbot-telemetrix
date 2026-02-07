@@ -1,58 +1,80 @@
-(# ThingBot Telemetrix — Python API Reference)
+# ThingBot Telemetrix
 
-This section documents the primary Python API for controlling a ThingBot board via the Telemetrix library.
+ThingBot Telemetrix provides a Python API and an Arduino companion library for controlling ThingBot-compatible boards over the Telemetrix protocol. Use this repository to script sensors and actuators from Python or run Arduino firmware that speaks Telemetrix.
 
-**Board Initialization**
-- `board`: The main board object created when the Telemetrix connection is initialized. Use this object to read from sensors and control actuators.
+## Highlights
 
-**Digital & Analog I/O**
-- `digital_write(pin_number, value)`: Set a digital `pin_number` to `value` (`0`/`False` or `1`/`True`). Used for driving LEDs, relays, or other digital outputs.
-- `analog_write(pin_number, value)`: Set an analog (PWM) `pin_number` to `value` (typically `0`..`255` or `0.0`..`1.0` depending on board). Used for PWM-controlled LEDs, motors (through driver), etc.
-- `digital_read(pin_number)`: Read and return the current digital value on `pin_number` (`0` or `1`).
-- `analog_read(pin_number)`: Read and return the analog value on `pin_number` (ADC reading, typically an integer or float depending on board resolution).
+- Lightweight Python API for digital, analog/PWM, DHT, servo and DC motor control
+- Example Python scripts in `examples/`
+- Arduino library and example firmware in `thingbot-telemetrix-arduino/`
 
-**Pin Mode Helpers**
-- `set_pin_mode_analog_output(pin_number)`: Configure `pin_number` for analog (PWM) output.
-- `set_pin_mode_digital_output(pin_number)`: Configure `pin_number` for digital output.
-- `set_pin_mode_analog_input(pin_number, callback)`: Configure `pin_number` as an analog input. `callback(value)` is invoked when readings are received.
-- `set_pin_mode_digital_input(pin_number, callback)`: Configure `pin_number` as a digital input. `callback(value)` is invoked on changes or reports.
-- `set_pin_mode_dht(pin_number, callback, dht_type)`: Configure `pin_number` for a DHT sensor (e.g., DHT11/DHT22). `callback(data)` receives temperature/humidity payloads; `dht_type` selects sensor model.
+## Repository layout
 
-**Actuator Controls**
-- `control_dc(dc_number, speed)`: Control a DC motor driver channel `dc_number`. `speed` is typically in the range `-255..255` (negative for reverse) or `-1.0..1.0` depending on board conventions.
-- `control_servo(servo_number, speed)`: Control a servo on `servo_number`. `speed` is interpreted as an angle or normalized position depending on board firmware (commonly `0..180` degrees or `-1.0..1.0`).
+- `thingbot_telemetrix/` — Python package: core API and handlers
+- `examples/` — Example Python scripts (`blink.py`, `dht_input.py`)
+- `thingbot-telemetrix-arduino/` — Arduino library and PlatformIO example
 
+## Requirements
 
-Examples
+- Python 3.9 or newer
+- A ThingBot-compatible board running Telemetrix or compatible firmware
+- Serial (USB) or network access to the board
 
-- Set pin 13 HIGH (digital):
+## Installation
 
-	```python
-	board.digital_write(13, 1)
-	```
+Install the Python package for development:
 
-- PWM a pin (half duty):
+```bash
+pip install thingbot-telemetrix
+```
 
-	```python
-	board.analog_write(5, 128)
-	```
+## Quickstart (Python)
 
-- Register a digital input callback:
+Import and connect to a board (API names are illustrative — check package docstrings):
 
-	```python
-	def on_change(value):
-			print('Digital value:', value)
+```python
+from thingbot_telemetrix import telemetrix
 
-	board.set_pin_mode_digital_input(7, on_change)
-	```
+# Example: open serial port and connect
+board = telemetrix.Telemetrix('/dev/ttyUSB0')  # Adjust port as needed or None for auto-detect
 
-- Control a DC motor and a servo:
+# Digital write
+board.gpio().digital_write(13, 1)
 
-	```python
-	board.control_dc(1, 200)      # run DC channel 1 forward
-	board.control_servo(0, 90)    # move servo 0 to 90 degrees
-	```
+# PWM write
+board.gpio().analog().analog_write(5, 128)
 
-Notes
-- Exact value ranges (e.g., PWM scale or servo angle units) depend on the board firmware and should be confirmed against your platform's docs. Callbacks receive raw values as delivered by the board; convert/scale as needed.
+# Register analog input callback
+def on_analog(value):
+	print('Analog:', value)
+
+board.gpio().set_pin_mode_analog_input(0, on_analog)
+```
+
+## Actuators & Sensors
+
+- `control_dc(channel, speed)` — control a DC motor channel (speed range depends on firmware)
+- `control_servo(index, position)` — set servo position (commonly 0–180)
+- `set_pin_mode_dht(pin, callback, dht_type)` — read DHT11/DHT22 sensors
+
+## Arduino firmware
+
+The `thingbot-telemetrix-arduino/` folder contains a PlatformIO project and an Arduino library `ThingBotTelemetrixArduino` that implements board-side handling for the Telemetrix protocol. Open the folder in PlatformIO to build and flash the firmware.
+
+## Examples
+
+- `examples/blink.py` — blink an onboard LED
+- `examples/dht_input.py` — sample DHT sensor reader
+
+## Contributing
+
+Contributions are welcome. Please open issues for bugs or feature requests and send PRs for fixes or enhancements. Keep changes focused and include tests/examples when appropriate.
+
+## License
+
+This project is provided under the MIT License. See `LICENSE` for details.
+
+---
+
+For detailed API docs, view the docstrings in the `thingbot_telemetrix` package or open the examples for usage patterns.
 
