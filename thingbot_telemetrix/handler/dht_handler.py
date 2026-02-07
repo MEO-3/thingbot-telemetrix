@@ -10,7 +10,7 @@ class DhtHandler:
         if callback is not None:
             self.dht_callbacks[pin_number] = callback
         
-        command = [ThingBotConstants.SET_PIN_MODE, PinModes.DHT, pin_number, dht_type]    
+        command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.DHT, dht_type]    
         self.telemetrix._send_command(command)
 
     def dht_report(self, pin_number, temperature, humidity):

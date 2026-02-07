@@ -142,13 +142,13 @@ class GpioHandler:
             print('{} {}'.format('set_pin_mode: callback ignored for pin state:', pin_mode))
 
         if pin_mode == PinModes.INPUT:
-            command = [ThingBotConstants.SET_PIN_MODE, PinModes.INPUT, pin_number, 1]
+            command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.INPUT, 1]
         elif pin_mode == PinModes.INPUT_PULLUP:
-            command = [ThingBotConstants.SET_PIN_MODE, PinModes.INPUT_PULLUP, pin_number, 1]
+            command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.INPUT_PULLUP, 1]
         elif pin_mode == PinModes.OUTPUT:
-            command = [ThingBotConstants.SET_PIN_MODE, PinModes.OUTPUT, pin_number, 0]
+            command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.OUTPUT, 0]
         elif pin_mode == PinModes.ANALOG:
-            command = [ThingBotConstants.SET_PIN_MODE, PinModes.ANALOG, pin_number, differential >> 8, differential & 0xFF] # set differential as 2 bytes (MSB, LSB)
+            command = [ThingBotConstants.SET_PIN_MODE, pin_number, PinModes.ANALOG, differential >> 8, differential & 0xFF] # set differential as 2 bytes (MSB, LSB)
             
         else:
             if self.telemetrix.shutdown_on_exception:
