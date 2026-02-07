@@ -109,6 +109,18 @@ class Telemetrix(threading.Thread):
         self.thread_data_receive.start()
         self.report_thread.start()
         
+        # handler instances
+        self.gpio_handler = GpioHandler(self)
+        self.i2c_handler = I2CHandler(self)
+        self.dht_handler = DhtHandler(self)
+        
+        # report dispatch table
+        self.report_dispatch = {
+            ThingBotConstants.I_AM_HERE_REPORT: self._i_am_here_report,
+            ThingBotConstants.DEBUG_PRINT: self._debug_print_report,
+            ThingBotConstants.DHT_REPORT: self.dht_handler.dht_report,
+        }
+        
         if not self.ip_address:
             if not self.com_port:
                 try:
@@ -122,17 +134,6 @@ class Telemetrix(threading.Thread):
     
             if not self.serial_port:
                 raise RuntimeError('No Arduino found on any serial port.')
-            
-        self.gpio_handler = GpioHandler(self)
-        self.i2c_handler = I2CHandler(self)
-        self.dht_handler = DhtHandler(self)
-        
-        # report dispatch table
-        self.report_dispatch = {
-            ThingBotConstants.I_AM_HERE_REPORT: self._i_am_here_report,
-            ThingBotConstants.DEBUG_PRINT: self._debug_print_report,
-            ThingBotConstants.DHT_REPORT: self.dht_handler.dht_report,
-        }
     
     def gpio(self):
         """

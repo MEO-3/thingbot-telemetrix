@@ -2,16 +2,21 @@ import time
 import sys
 
 from thingbot_telemetrix import telemetrix
+from thingbot_telemetrix.private_constants import ThingBotConstants, DHTTypes
 
 board = telemetrix.Telemetrix()
 
-board.gpio().set_pin_mode_output(7)
+# board.gpio().set_pin_mode_output(7)
 
-""" Blink the onboard LED on pin 7 """
+# """ Blink the onboard LED on pin 7 """
+# while True:
+#     time.sleep(1)
+#     board.gpio().digital_write(7, 1)
+#     print("LED ON")
+#     time.sleep(1)
+#     board.gpio().digital_write(7, 0)
+#     print("LED OFF")
+
+board.dht().set_pin_mode_dht(2, dht_type=DHTTypes.DHT11, callback=lambda temperature, humidity: print(f"Temperature: {temperature} C, Humidity: {humidity} %"))
 while True:
-    time.sleep(1)
-    board.gpio().digital_write(7, 1)
-    print("LED ON")
-    time.sleep(1)
-    board.gpio().digital_write(7, 0)
-    print("LED OFF")
+    time.sleep(10)
