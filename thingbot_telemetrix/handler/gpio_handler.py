@@ -87,28 +87,40 @@ class GpioHandler:
         command = [ThingBotConstants.ANALOG_READ, pin_number]
         self.telemetrix._send_command(command)
         
-    def digital_report(self, pin_number, value):
+    def digital_report(self, response_data = []):
         """
-        This function is called when a GPIO report is received from the Arduino.
+        This function is called when a digital report is received from the Arduino.
 
-        :param pin_number: Arduino pin number
-
-        :param value: Pin value
+        :param response_data: The response data list from the Arduino.
+                              Format: [pin_number, value]
 
         """
+        if len(response_data) != 2:
+            print("Digital report received with invalid data length.")
+            return
+        
+        pin_number = response_data[0]
+        value = response_data[1]
+        
         if pin_number in self.digital_callbacks:
             callback = self.digital_callbacks[pin_number]
             callback(value)
     
-    def analog_report(self, pin_number, value):
+    def analog_report(self, response_data = []):
         """
         This function is called when an analog report is received from the Arduino.
 
-        :param pin_number: Arduino pin number
-
-        :param value: Pin value
+        :param response_data: The response data list from the Arduino.
+                              Format: [pin_number, value_high_byte, value_low_byte]
 
         """
+        if len(response_data) != 3:
+            print("Analog report received with invalid data length.")
+            return
+        
+        pin_number = response_data[0]
+        value = (response_data[1] << 8) | response_data[2]
+        
         if pin_number in self.analog_callbacks:
             callback = self.analog_callbacks[pin_number]
             callback(value)
