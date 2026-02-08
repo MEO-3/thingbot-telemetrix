@@ -17,6 +17,11 @@ class ThingBotConstants:
     DIGITAL_READ = 4
     ANALOG_READ = 5
     ARE_U_THERE = 6  # Arduino ID query for auto-detect of telemetrix connected boards
+    
+    DC_WRITE = 7
+    SERVO_WRITE = 8
+    BUZZER_WRITE = 9
+    LED_WRITE = 10
 
     # reports
     # debug data from Arduino
@@ -45,3 +50,18 @@ class DHTTypes:
     """
     DHT11 = 11
     DHT22 = 22
+
+class ThingBot:
+    MOTOR_1 = 1
+    MOTOR_2 = 2
+    MOTOR_3 = 3
+    MOTOR_4 = 4
+    
+    SERVO_1 = 1
+    SERVO_2 = 2
+    SERVO_3 = 3
+    SERVO_4 = 4
+    SERVO_5 = 5
+    
+    LED_1 = 1
+    LED_2 = 2
