@@ -18,7 +18,7 @@ class ThingBotHandler():
         Control the LED on the ThingBot.
 
         :param led_number: The LED number to control.
-        :param state: State of the LED. Set to 1 for ON, 0 for OFF.
+        :param state: State of the LED. Set to 100 for fully on, 0 for off.
         """
         command = [ThingBotConstants.LED_WRITE, led_number, state]
         self.telemetrix._send_command(command)

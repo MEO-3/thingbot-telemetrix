@@ -2,16 +2,16 @@ import time
 import sys
 
 from thingbot_telemetrix import telemetrix
+from thingbot_telemetrix.private_constants import ThingBot
 
 board = telemetrix.Telemetrix()
 
-board.gpio().set_pin_mode_output(7)
+board.thingbot().control_led(ThingBot.LED_1, 100)
 
-""" Blink the LED on pin 7 """
 while True:
     time.sleep(2)
-    board.gpio().digital_write(7, 1)
-    print("LED ON")
-    time.sleep(2)
-    board.gpio().digital_write(7, 0)
+    board.thingbot().control_led(ThingBot.LED_2, 0)
     print("LED OFF")
+    time.sleep(2)
+    board.thingbot().control_led(ThingBot.LED_2, 100)
+    print("LED ON")

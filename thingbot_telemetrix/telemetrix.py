@@ -27,6 +27,7 @@ from serial.serialutil import SerialException
 from serial.tools import list_ports
 
 from thingbot_telemetrix.handler.dht_handler import DhtHandler
+from thingbot_telemetrix.handler.thingbot_handler import ThingBotHandler
 from thingbot_telemetrix.private_constants import ThingBotConstants
 from thingbot_telemetrix.telemetrix_port_register import TelemetrixPortRegister
 from thingbot_telemetrix.handler.gpio_handler import GpioHandler
@@ -113,6 +114,7 @@ class Telemetrix(threading.Thread):
         self.gpio_handler = GpioHandler(self)
         self.i2c_handler = I2CHandler(self)
         self.dht_handler = DhtHandler(self)
+        self.thingbot_handler = ThingBotHandler(self)
         
         # report dispatch table
         self.report_dispatch = {
@@ -152,7 +154,14 @@ class Telemetrix(threading.Thread):
         :return: reference to DHT handler instance
         """
         return self.dht_handler
-        
+    
+    def thingbot(self):
+        """
+        Access to ThingBot handler methods.
+
+        :return: reference to ThingBot handler instance
+        """
+        return self.thingbot_handler
 
     # Thread control methods
     def _run_threads(self):
