@@ -3,6 +3,7 @@ from thingbot_telemetrix.private_constants import ThingBotConstants
 class ThingBotHandler():
     def __init__(self, telemetrix):
         self.telemetrix = telemetrix
+        self.sw_callback = None
         
     def control_buzzer(self, frequency):
         """
@@ -42,3 +43,28 @@ class ThingBotHandler():
         """
         command = [ThingBotConstants.SERVO_WRITE, servo_number, angle]
         self.telemetrix._send_command(command)
+        
+    def set_sw_callback(self, callback):
+        """
+        Set a callback function for ThingBot switch events.
+
+        :param callback: A reference to a call back function to be
+                         called when a switch event occurs.
+
+        """
+        self.sw_callback = callback
+        
+    def thingbot_sw_report(self, response_data = []):
+        """
+        Internal method to handle ThingBot specific reports.
+
+        :param response_data: List of data bytes from the ThingBot report.
+
+        """
+        _ = response_data[0]
+        value = response_data[1]
+        if self.sw_callback:
+            if value == 1: # switch released
+                self.sw_callback(False)
+            else: # switch pressed
+                self.sw_callback(True)

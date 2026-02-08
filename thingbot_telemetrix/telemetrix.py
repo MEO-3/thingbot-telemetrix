@@ -123,6 +123,7 @@ class Telemetrix(threading.Thread):
             ThingBotConstants.DIGITAL_REPORT: self.gpio_handler.digital_report,
             ThingBotConstants.ANALOG_REPORT: self.gpio_handler.analog_report,
             ThingBotConstants.DHT_REPORT: self.dht_handler.dht_report,
+            ThingBotConstants.THINGBOT_SW_REPORT: self.thingbot_handler.thingbot_sw_report
         }
         
         if not self.ip_address:
