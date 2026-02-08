@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "thingbot_telemetrix"
-version = "0.0.1"
+version = "1.0.0"
 description = "ThingBot Telemetrix Python client for interacting with ThingBot hardware"
 readme = "README.md"
 authors = [ { name = "lgthevinh", email = "everwellmax@gmail.com" } ]
-license = { text = "MIT" }
+license = { text = "AGPL-3.0-or-later" }
 keywords = ["iot", "arduino", "telemetry", "telemetrix"]
 classifiers = [
 	"Programming Language :: Python :: 3",
-	"License :: OSI Approved :: MIT License",
+	"License :: OSI Approved :: GNU Affero General Public License v3",
 	"Operating System :: OS Independent",
 ]
 requires-python = ">=3.9"
@@ -36,6 +36,9 @@ Repository = "https://github.com/MEO-3/thingbot-telemetrix"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["thingbot_telemetrix*"]
+
+[tool.setuptools]
+license-files = []
 
 [tool.black]
 line-length = 88
