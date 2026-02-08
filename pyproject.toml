@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "thingbot_telemetrix"
-version = "1.0.0"
+version = "1.0"
 description = "ThingBot Telemetrix Python client for interacting with ThingBot hardware"
 readme = "README.md"
 authors = [ { name = "lgthevinh", email = "everwellmax@gmail.com" } ]
