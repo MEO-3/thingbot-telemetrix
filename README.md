@@ -1,6 +1,6 @@
 # ThingBot Telemetrix
 
-ThingBot Telemetrix provides a Python API and an Arduino companion library for controlling ThingBot-compatible boards over the Telemetrix protocol. Use this repository to script sensors and actuators from Python or run Arduino firmware that speaks Telemetrix.
+ThingBot Telemetrix provides a Python API and an Arduino companion library for controlling ThingBot over the Telemetrix protocol. Use this repository to script sensors and actuators from Python or run Arduino firmware that speaks Telemetrix.
 
 ## Highlights
 
