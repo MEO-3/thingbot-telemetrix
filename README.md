@@ -20,6 +20,29 @@ ThingBot Telemetrix provides a Python API and an Arduino companion library for c
 - A ThingBot-compatible board running Telemetrix or compatible firmware
 - Serial (USB) or network access to the board
 
+## Flash firmware
+
+To flash ThingBot board with Telemetrix firmware, there are 2 option for this:
+
+1. Use `meo-tool` cli tool to flash telemetrix firmware.
+- First, install the Python cli tool `meo-tool`:
+
+```bash
+pip install meo-tool
+```
+
+- Then, use `meo-tool` to flash the firmware:
+
+```bash
+meo-tool flash thingbot-telemetrix --latest --auto-detect
+```
+
+2. Use PlatformIO/Arduino IDE to build and flash the firmware from the `thingbot-telemetrix-arduino/` repository. Open the folder in PlatformIO, select the appropriate board and port, and build/flash the firmware.
+- thingbot-telemetrix-arduino [GitHub repository](https://github.com/MEO-3/thingbot-telemetrix-arduino)
+- PlatformIO project: `thingbot-telemetrix-arduino/platformio.ini` contains build configurations for supported boards.
+- Arduino IDE: `thingbot-telemetrix-arduino/src/main.cpp` defines the board-side handling for the Telemetrix protocol.
+- Or choose the pre-compiled firmware binary from the releases page and flash it using your preferred method (e.g. `esptool.py` for ESP32).
+
 ## Installation
 
 Install the Python package for development:
