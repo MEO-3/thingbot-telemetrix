@@ -32,6 +32,7 @@ from thingbot_telemetrix.private_constants import ThingBotConstants
 from thingbot_telemetrix.telemetrix_port_register import TelemetrixPortRegister
 from thingbot_telemetrix.handler.gpio_handler import GpioHandler
 from thingbot_telemetrix.handler.i2c_handler import I2CHandler
+from thingbot_telemetrix.handler.ultrasonic_handle import UltrasonicHandler
 
 
 class Telemetrix(threading.Thread):
@@ -115,6 +116,7 @@ class Telemetrix(threading.Thread):
         self.i2c_handler = I2CHandler(self)
         self.dht_handler = DhtHandler(self)
         self.thingbot_handler = ThingBotHandler(self)
+        self.ultrasonic_handler = UltrasonicHandler(self)
         
         # report dispatch table
         self.report_dispatch = {
@@ -123,7 +125,8 @@ class Telemetrix(threading.Thread):
             ThingBotConstants.DIGITAL_REPORT: self.gpio_handler.digital_report,
             ThingBotConstants.ANALOG_REPORT: self.gpio_handler.analog_report,
             ThingBotConstants.DHT_REPORT: self.dht_handler.dht_report,
-            ThingBotConstants.THINGBOT_SW_REPORT: self.thingbot_handler.thingbot_sw_report
+            ThingBotConstants.THINGBOT_SW_REPORT: self.thingbot_handler.thingbot_sw_report,
+            ThingBotConstants.ULTRASONIC_REPORT: self.ultrasonic_handler.ultrasonic_report
         }
         
         if not self.ip_address:
@@ -156,6 +159,14 @@ class Telemetrix(threading.Thread):
         """
         return self.dht_handler
     
+    def ultrasonic(self):
+        """
+        Access to Ultrasonic handler methods.
+
+        :return: reference to Ultrasonic handler instance
+        """
+        return self.ultrasonic_handler
+
     def thingbot(self):
         """
         Access to ThingBot handler methods.

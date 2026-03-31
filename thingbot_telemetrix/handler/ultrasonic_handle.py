@@ -20,19 +20,18 @@ class UltrasonicHandler:
         This function is called when an ultrasonic report is received from the Arduino.
 
         :param response_data: The response data list from the Arduino.
-                              Format: [trigger_pin, echo_pin, distance_high_byte, distance_low_byte]
+                              Format: [echo_pin, trigger_pin, distance_high_byte, distance_low_byte]
 
         """
         if len(response_data) != 4:
             print("Ultrasonic report received with invalid data length.")
             return
         
-        trigger_pin = response_data[0]
-        echo_pin = response_data[1]
+        trigger_pin = response_data[1]
+        echo_pin = response_data[0]
         distance = (response_data[2] << 8) | response_data[3]
         
         callback_key = (trigger_pin, echo_pin)
         if callback_key in self.ultrasonic_callbacks:
             callback = self.ultrasonic_callbacks[callback_key]
             callback(distance, trigger_pin, echo_pin)
-    

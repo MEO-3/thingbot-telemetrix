@@ -17,11 +17,12 @@ class ThingBotConstants:
     DIGITAL_READ = 4
     ANALOG_READ = 5
     ARE_U_THERE = 6  # Arduino ID query for auto-detect of telemetrix connected boards
-    
-    DC_WRITE = 7
-    SERVO_WRITE = 8
-    BUZZER_WRITE = 9
-    LED_WRITE = 10
+    READ_ULTRASONIC = 7
+
+    DC_WRITE = 101
+    SERVO_WRITE = 102
+    BUZZER_WRITE = 103
+    LED_WRITE = 104
 
     # reports
     # debug data from Arduino
@@ -29,7 +30,8 @@ class ThingBotConstants:
     ANALOG_REPORT = ANALOG_WRITE
     I_AM_HERE_REPORT = ARE_U_THERE
     DHT_REPORT = 11
-    THINGBOT_SW_REPORT = 12
+    ULTRASONIC_REPORT = READ_ULTRASONIC
+    THINGBOT_SW_REPORT = 102
     DEBUG_PRINT = 99
 
     TELEMETRIX_VERSION = "1.0"
