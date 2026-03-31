@@ -59,7 +59,9 @@ ThingBot Telemetrix provides a Python client API and companion Arduino firmware 
   - `control_dc(motor_number, speed)`
   - `control_servo(servo_number, angle)`
   - `set_sw_callback(callback)`
-- `UltrasonicHandler` is instantiated on `Telemetrix` and used in the report dispatch table, but there is no public accessor method in the current code.
+- `ultrasonic()`
+  - `set_pin_mode_ultrasonic(trigger_pin, echo_pin, callback=None)`
+  - `read_ultrasonic()`
 
 ## Telemetrix Protocol Constants
 

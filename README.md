@@ -4,14 +4,14 @@ ThingBot Telemetrix provides a Python API and an Arduino companion library for c
 
 ## Highlights
 
-- Lightweight Python API for digital, analog/PWM, DHT, servo and DC motor control
+- Lightweight Python API for digital, analog/PWM, DHT, ultrasonic, servo and DC motor control
 - Example Python scripts in `examples/`
 - Arduino library and example firmware in `thingbot-telemetrix-arduino/`
 
 ## Repository layout
 
 - `thingbot_telemetrix/` — Python package: core API and handlers
-- `examples/` — Example Python scripts (`blink.py`, `dht_input.py`)
+- `examples/` — Example Python scripts (`blink.py`, `dht_input.py`, `ultrasonic_distance.py`)
 - `thingbot-telemetrix-arduino/` — Arduino library and PlatformIO example
 
 ## Requirements
@@ -79,6 +79,7 @@ board.gpio().set_pin_mode_analog_input(0, callback=on_analog)
 - `control_dc(channel, speed)` — control a DC motor channel (speed range depends on firmware)
 - `control_servo(index, position)` — set servo position (commonly 0–180)
 - `set_pin_mode_dht(pin, callback, dht_type)` — read DHT11/DHT22 sensors
+- Ultrasonic distance via `set_pin_mode_ultrasonic(...)` and `read_ultrasonic()` on `board.ultrasonic()`
 
 ## Arduino firmware
 
@@ -89,6 +90,7 @@ The `thingbot-telemetrix-arduino/` folder contains a PlatformIO project and an A
 - `examples/blink.py` — blink an onboard LED
 - `examples/dht_input.py` — sample DHT sensor reader
 - `examples/thingbot_switch.py` — example ThingBot switch handler
+- `examples/ultrasonic_distance.py` — example ultrasonic distance reader
 
 ## Contributing
 
@@ -112,6 +114,7 @@ board = Telemetrix()
 gpio = board.gpio()
 dht = board.dht()
 thingbot = board.thingbot()
+ultrasonic = board.ultrasonic()
 ```
 
 - **GpioHandler** (`gpio`)
@@ -165,9 +168,13 @@ thingbot = board.thingbot()
 	thingbot.set_sw_callback(on_switch)
 	```
 
+- **UltrasonicHandler** (`ultrasonic` via `board.ultrasonic()`)
+
+	- `set_pin_mode_ultrasonic(trigger_pin, echo_pin, callback=None)` — enable ultrasonic sensing and register a callback `callback(distance, trigger_pin, echo_pin)`.
+	- `read_ultrasonic()` — request a single ultrasonic distance measurement.
+
 For more details check the handler source files in `thingbot_telemetrix/handler/`.
 
 ---
 
 For detailed API docs, view the docstrings in the `thingbot_telemetrix` package or open the examples for usage patterns.
-

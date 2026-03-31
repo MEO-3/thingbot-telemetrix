@@ -175,6 +175,14 @@ class Telemetrix(threading.Thread):
         """
         return self.thingbot_handler
 
+    def ultrasonic(self):
+        """
+        Access to Ultrasonic handler methods.
+
+        :return: reference to Ultrasonic handler instance
+        """
+        return self.ultrasonic_handler
+
     # Thread control methods
     def _run_threads(self):
         self.run_event.set()
