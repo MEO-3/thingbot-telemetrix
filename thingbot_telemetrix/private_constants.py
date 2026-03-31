@@ -46,6 +46,7 @@ class PinModes:
     INPUT_PULLUP = 0x05
     ANALOG = 0x07
     DHT = 0x11
+    ULTRASONIC_PIN_MODE = 0x12
     
 class DHTTypes:
     """
