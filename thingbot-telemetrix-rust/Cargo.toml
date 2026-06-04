@@ -1,0 +1,9 @@
+[package]
+name = "thingbot-telemetrix-rust"
+version = "0.1.0"
+edition = "2024"
+description = "Rust client library for ThingBot Telemetrix firmware"
+license = "AGPL-3.0-or-later"
+
+[dependencies]
+serialport = { version = "4", default-features = false }

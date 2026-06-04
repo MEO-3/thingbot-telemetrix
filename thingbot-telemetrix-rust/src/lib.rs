@@ -1,0 +1,21 @@
+//! Rust client library for ThingBot Telemetrix firmware.
+//!
+//! This crate currently provides the core protocol model, report decoding,
+//! transport abstraction, and a synchronous client API. Serial/TCP transports
+//! can be added behind the [`Transport`] trait without changing the high-level
+//! command API.
+
+pub mod client;
+pub mod error;
+pub mod protocol;
+pub mod report;
+pub mod transport;
+
+pub use client::{GpioClient, ThingBot, ThingBotClient, ThingBotDevice, UltrasonicClient};
+pub use error::{Error, Result};
+pub use protocol::{
+    Command, DhtType, Led, Motor, Packet, PinMode, Servo, ThingBotProtocol, command_id,
+    pin_mode_id, report_id,
+};
+pub use report::{Report, decode_report};
+pub use transport::{SerialTransport, Transport};
