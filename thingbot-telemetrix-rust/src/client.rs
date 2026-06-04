@@ -4,13 +4,11 @@ use crate::report::{Report, decode_report};
 use crate::transport::{SerialTransport, Transport};
 use std::time::Duration;
 
-pub struct ThingBotDevice<T> {
+pub struct Telemetrix<T = SerialTransport> {
     transport: T,
 }
 
-pub type ThingBot = ThingBotDevice<SerialTransport>;
-
-impl ThingBot {
+impl Telemetrix<SerialTransport> {
     pub fn connect(port_name: impl AsRef<str>) -> Result<Self> {
         Ok(Self::new(SerialTransport::open(port_name)?))
     }
@@ -26,7 +24,7 @@ impl ThingBot {
     }
 }
 
-impl<T: Transport> ThingBotDevice<T> {
+impl<T: Transport> Telemetrix<T> {
     pub fn new(transport: T) -> Self {
         Self { transport }
     }
@@ -69,7 +67,7 @@ impl<T: Transport> ThingBotDevice<T> {
 }
 
 pub struct GpioClient<'a, T> {
-    device: &'a mut ThingBotDevice<T>,
+    device: &'a mut Telemetrix<T>,
 }
 
 impl<T: Transport> GpioClient<'_, T> {
@@ -120,7 +118,7 @@ impl<T: Transport> GpioClient<'_, T> {
 }
 
 pub struct ThingBotClient<'a, T> {
-    device: &'a mut ThingBotDevice<T>,
+    device: &'a mut Telemetrix<T>,
 }
 
 impl<T: Transport> ThingBotClient<'_, T> {
@@ -142,7 +140,7 @@ impl<T: Transport> ThingBotClient<'_, T> {
 }
 
 pub struct UltrasonicClient<'a, T> {
-    device: &'a mut ThingBotDevice<T>,
+    device: &'a mut Telemetrix<T>,
 }
 
 impl<T: Transport> UltrasonicClient<'_, T> {

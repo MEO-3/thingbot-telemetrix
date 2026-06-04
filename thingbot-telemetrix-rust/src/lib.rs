@@ -11,10 +11,10 @@ pub mod protocol;
 pub mod report;
 pub mod transport;
 
-pub use client::{GpioClient, ThingBot, ThingBotClient, ThingBotDevice, UltrasonicClient};
+pub use client::{GpioClient, Telemetrix, ThingBotClient, UltrasonicClient};
 pub use error::{Error, Result};
 pub use protocol::{
-    Command, DhtType, Led, Motor, Packet, PinMode, Servo, ThingBotProtocol, command_id,
+    Command, DhtType, Led, Motor, Packet, PinMode, Servo, TelemetrixProtocol, command_id,
     pin_mode_id, report_id,
 };
 pub use report::{Report, decode_report};

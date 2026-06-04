@@ -264,9 +264,9 @@ impl Command {
     }
 }
 
-pub struct ThingBotProtocol;
+pub struct TelemetrixProtocol;
 
-impl ThingBotProtocol {
+impl TelemetrixProtocol {
     pub fn encode(command: &Command) -> Result<Vec<u8>> {
         Ok(command.encode()?.to_wire())
     }

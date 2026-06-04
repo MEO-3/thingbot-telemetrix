@@ -1,8 +1,10 @@
-use thingbot_telemetrix_rust::{Command, Error, Packet, ThingBotProtocol, command_id, pin_mode_id};
+use thingbot_telemetrix_rust::{
+    Command, Error, Packet, TelemetrixProtocol, command_id, pin_mode_id,
+};
 
 #[test]
 fn encodes_digital_write_packet() {
-    let bytes = ThingBotProtocol::encode(&Command::DigitalWrite {
+    let bytes = TelemetrixProtocol::encode(&Command::DigitalWrite {
         pin: 7,
         value: true,
     })
@@ -13,7 +15,7 @@ fn encodes_digital_write_packet() {
 
 #[test]
 fn encodes_analog_write_as_two_byte_value() {
-    let bytes = ThingBotProtocol::encode(&Command::AnalogWrite {
+    let bytes = TelemetrixProtocol::encode(&Command::AnalogWrite {
         pin: 4,
         value: 1023,
     })
@@ -24,7 +26,7 @@ fn encodes_analog_write_as_two_byte_value() {
 
 #[test]
 fn encodes_ultrasonic_pin_mode_with_echo_pin_first() {
-    let bytes = ThingBotProtocol::encode(&Command::SetUltrasonic {
+    let bytes = TelemetrixProtocol::encode(&Command::SetUltrasonic {
         trigger_pin: 5,
         echo_pin: 6,
     })
