@@ -3,3 +3,4 @@ thingbot-telemetrix.code-workspace
 dist/
 *.egg-info/
 .vscode/
+thingbot-telemetrix-arduino/
