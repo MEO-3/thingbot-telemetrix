@@ -6,7 +6,7 @@ class UltrasonicHandler:
         self.ultrasonic_callbacks = {}
 
     def set_pin_mode_ultrasonic(self, trigger_pin, echo_pin, callback=None):
-        command = [ThingBotConstants.SET_PIN_MODE, trigger_pin, PinModes.ULTRASONIC_TRIGGER, echo_pin]
+        command = [ThingBotConstants.SET_PIN_MODE, trigger_pin, PinModes.ULTRASONIC_PIN_MODE, echo_pin]
         self.telemetrix._send_command(command)
         if callback:
             self.ultrasonic_callbacks[(trigger_pin, echo_pin)] = callback

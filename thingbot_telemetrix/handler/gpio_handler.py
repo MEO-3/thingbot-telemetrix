@@ -41,7 +41,7 @@ class GpioHandler:
                          called when pin data value changes
 
         """
-        self._set_pin_mode(pin_number, PinModes.ANALOG_INPUT, differential=differential, callback=callback)
+        self._set_pin_mode(pin_number, PinModes.ANALOG, differential=differential, callback=callback)
 
     def digital_write(self, pin_number, value):
         """

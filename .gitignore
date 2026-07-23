@@ -1,4 +1,5 @@
 __pycache__/
+.venv/
 thingbot-telemetrix.code-workspace
 dist/
 *.egg-info/

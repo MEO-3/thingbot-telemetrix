@@ -51,6 +51,12 @@ Install the Python package for development:
 pip install thingbot-telemetrix
 ```
 
+For BLE support (boards flashed with the BLE firmware build), install the `ble` extra:
+
+```bash
+pip install thingbot-telemetrix[ble]
+```
+
 ## Quickstart (Python)
 
 Import and connect to a board (API names are illustrative — check package docstrings):
@@ -60,6 +66,13 @@ from thingbot_telemetrix import Telemetrix
 
 # Example: open serial port and connect
 board = Telemetrix('/dev/ttyUSB0')  # Adjust port as needed or None for auto-detect
+
+# Or connect over BLE (requires the BLE firmware build and the ble extra):
+# board = Telemetrix(ble_name='ThingBot')            # scan by advertised name
+# board = Telemetrix(ble_address='AA:BB:CC:DD:EE:FF') # connect directly
+
+# Or over TCP/IP:
+# board = Telemetrix(ip_address='192.168.1.50')
 
 # Digital write
 board.gpio().digital_write(13, 1)
@@ -88,6 +101,7 @@ The `thingbot-telemetrix-arduino/` folder contains a PlatformIO project and an A
 ## Examples
 
 - `examples/blink.py` — blink an onboard LED
+- `examples/blink_ble.py` — blink an LED over BLE
 - `examples/dht_input.py` — sample DHT sensor reader
 - `examples/thingbot_switch.py` — example ThingBot switch handler
 - `examples/ultrasonic_distance.py` — example ultrasonic distance reader

@@ -21,6 +21,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+ble = [
+	"bleak>=0.21"
+]
 dev = [
 	"pytest>=7.0",
 	"black",

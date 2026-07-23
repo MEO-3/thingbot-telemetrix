@@ -1,7 +1,7 @@
 # ThingBot Telemetrix Rust Client
 
 Rust client library for controlling ThingBot Telemetrix firmware over a serial
-connection.
+or BLE connection.
 
 The public board client is `Telemetrix`. ThingBot-specific controls are exposed
 through the `thingbot()` sub-client.
@@ -87,9 +87,42 @@ fn main() -> thingbot_telemetrix_rust::Result<()> {
 }
 ```
 
+## BLE
+
+For boards flashed with the BLE firmware build, enable the `ble` feature:
+
+```toml
+[dependencies]
+thingbot-telemetrix-rust = { git = "https://github.com/MEO-3/thingbot-telemetrix.git", package = "thingbot-telemetrix-rust", features = ["ble"] }
+```
+
+```rust
+use thingbot_telemetrix_rust::{BleConfig, Telemetrix};
+
+fn main() -> thingbot_telemetrix_rust::Result<()> {
+    // Scan for any board advertising the ThingBot service and connect,
+    let mut board = Telemetrix::connect_ble()?;
+
+    // or target a specific board:
+    let mut board = Telemetrix::connect_ble_with(BleConfig {
+        address: Some("AA:BB:CC:DD:EE:FF".into()),
+        ..BleConfig::default()
+    })?;
+
+    board.thingbot().buzzer(20)?;
+    Ok(())
+}
+```
+
+The same command and `poll_report()` APIs work over BLE; reports arrive as
+GATT notifications and are reassembled internally. On Linux, BLE support
+uses BlueZ over D-Bus.
+
 ## API Shape
 
 - `Telemetrix::connect(port)` opens a serial connection at `115200` baud.
+- `Telemetrix::connect_ble()` scans for and connects to a BLE board
+  (`ble` feature).
 - `telemetrix.gpio()` controls digital and analog pins.
 - `telemetrix.thingbot()` controls motors, servos, LEDs, and buzzer.
 - `telemetrix.ultrasonic()` configures and reads ultrasonic sensors.
@@ -113,6 +146,7 @@ From this folder:
 ```bash
 cargo fmt --check
 cargo test
+cargo test --features ble
 cargo test --examples
 ```
 

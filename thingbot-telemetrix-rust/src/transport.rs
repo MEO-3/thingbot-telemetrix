@@ -1,11 +1,45 @@
 use crate::error::Result;
 use crate::protocol::Packet;
+use std::collections::VecDeque;
 use std::io::{ErrorKind, Read, Write};
 use std::time::Duration;
 
 pub trait Transport {
     fn write_packet(&mut self, packet: &Packet) -> Result<()>;
     fn read_packet(&mut self) -> Result<Option<Packet>>;
+}
+
+/// Reassembles length-prefixed Telemetrix packets from an arbitrary byte
+/// stream. Transports whose reads do not align with packet boundaries
+/// (e.g. BLE notifications) push raw chunks in and pull whole packets out.
+#[derive(Debug, Default)]
+pub struct PacketAssembler {
+    buffer: VecDeque<u8>,
+}
+
+impl PacketAssembler {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn push(&mut self, bytes: &[u8]) {
+        self.buffer.extend(bytes);
+    }
+
+    /// Returns the next complete packet, or `None` if more bytes are needed.
+    /// A malformed frame is consumed before the error is returned, so the
+    /// assembler stays usable.
+    pub fn next_packet(&mut self) -> Result<Option<Packet>> {
+        let Some(&length) = self.buffer.front() else {
+            return Ok(None);
+        };
+        let total = length as usize + 1;
+        if self.buffer.len() < total {
+            return Ok(None);
+        }
+        let wire: Vec<u8> = self.buffer.drain(..total).collect();
+        Packet::from_wire(&wire).map(Some)
+    }
 }
 
 pub struct SerialTransport {

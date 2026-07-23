@@ -5,12 +5,16 @@
 //! can be added behind the [`Transport`] trait without changing the high-level
 //! command API.
 
+#[cfg(feature = "ble")]
+pub mod ble;
 pub mod client;
 pub mod error;
 pub mod protocol;
 pub mod report;
 pub mod transport;
 
+#[cfg(feature = "ble")]
+pub use ble::{BleConfig, BleTransport};
 pub use client::{GpioClient, Telemetrix, ThingBotClient, UltrasonicClient};
 pub use error::{Error, Result};
 pub use protocol::{
@@ -18,4 +22,4 @@ pub use protocol::{
     pin_mode_id, report_id,
 };
 pub use report::{Report, decode_report};
-pub use transport::{SerialTransport, Transport};
+pub use transport::{PacketAssembler, SerialTransport, Transport};

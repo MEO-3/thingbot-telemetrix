@@ -8,6 +8,19 @@ pub struct Telemetrix<T = SerialTransport> {
     transport: T,
 }
 
+#[cfg(feature = "ble")]
+impl Telemetrix<crate::ble::BleTransport> {
+    /// Scan for a ThingBot BLE device and connect. Requires the `ble`
+    /// feature and a board running the BLE firmware build.
+    pub fn connect_ble() -> Result<Self> {
+        Ok(Self::new(crate::ble::BleTransport::connect()?))
+    }
+
+    pub fn connect_ble_with(config: crate::ble::BleConfig) -> Result<Self> {
+        Ok(Self::new(crate::ble::BleTransport::connect_with(config)?))
+    }
+}
+
 impl Telemetrix<SerialTransport> {
     pub fn connect(port_name: impl AsRef<str>) -> Result<Self> {
         Ok(Self::new(SerialTransport::open(port_name)?))

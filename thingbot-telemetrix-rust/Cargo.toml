@@ -5,5 +5,16 @@ edition = "2024"
 description = "Rust client library for ThingBot Telemetrix firmware"
 license = "AGPL-3.0-or-later"
 
+[features]
+ble = ["dep:btleplug", "dep:tokio", "dep:futures", "dep:uuid"]
+
 [dependencies]
 serialport = { version = "4", default-features = false }
+btleplug = { version = "0.11", optional = true }
+tokio = { version = "1", features = ["rt-multi-thread", "time"], optional = true }
+futures = { version = "0.3", optional = true }
+uuid = { version = "1", optional = true }
+
+[[example]]
+name = "blink_ble"
+required-features = ["ble"]
